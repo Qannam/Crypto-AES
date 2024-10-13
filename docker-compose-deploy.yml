@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - static_data:/vol/web
+    environment:
+      - SECRET_KEY=samplesecret123_change
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+      - DEBUG=1
+
+
+  proxy:
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/vol/static
+    ports:
+      - "443:443"
+    depends_on:
+      - app
+
+volumes:
+  static_data:
