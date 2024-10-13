@@ -1,0 +1,132 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+  	<title>Crypto AES</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="{% static 'Crypto_AES/css/style.css' %}">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Crypto AES</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-lg-10 col-md-12">
+					<div class="wrapper">
+						<div class="row justify-content-center">
+							<div class="col-lg-8 mb-5">
+							</div>
+							<div class="col-lg-8">
+								<div class="contact-wrap" style="margin-bottom: 10%;">
+									<h3 class="mb-4 text-center">AES Encryption</h3>
+                  {% if encryption_error_message %}<div class="alert alert-danger" role="alert"><p><strong>{{encryption_error_message}}</strong></p></div>{% endif %}
+                  {% if encryption_success_message %}<div class="alert alert-success" role="alert"><p><strong>{{encryption_success_message}}</strong></p></div>{% endif %}
+									<form method="POST" action="{% url 'encrypt' %}" id="encryptionForm" name="encryptionForm" class="contactForm">
+                    {% csrf_token %}
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+                          <div id='encryptionKeyCounter' class='absolute counter-key'></div>
+                          <input type="text" class="form-control" name="encryptionKey" id="encryptionKey" {% if orginal_encryptionKey %} value="{{orginal_encryptionKey}}" {% endif %} placeholder="Key">
+                        </div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<textarea name="plainText" class="form-control" id="plainText" cols="30" rows="8" placeholder="Plain Text">{% if orginal_plainText %}{{orginal_plainText}}{% endif %}</textarea>
+												</div>
+											</div>
+                      <div class="col-md-12">
+												<div class="form-group">
+													<textarea disabled name="encryptionResult" class="form-control" style="background-color: #424242;" id="encryptionResult" cols="30" rows="8" placeholder="Encryption Result">{% if cipherText %}{{cipherText}}{% endif %}</textarea>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<input type="submit" value="Encrypt" class="btn btn-primary">
+													<div class="submitting"></div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+
+
+                <div id="decryptionBox" class="contact-wrap" style="margin-bottom: 10%;">
+									<h3 class="mb-4 text-center">AES Decryption</h3>
+                  {% if decryption_error_message %}<div class="alert alert-danger" role="alert"><p><strong>{{decryption_error_message}}</strong></p></div>{% endif %}
+                  {% if decryption_success_message %}<div class="alert alert-success" role="alert"><p><strong>{{decryption_success_message}}</strong></p></div>{% endif %}
+									<form method="POST" action="{% url 'decrypt' %}"  id="decryptionForm" name="decryptionForm" class="contactForm">
+                    {% csrf_token %}
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+                          <div id='decryptionKeyCounter' class='absolute counter-key'></div>
+													<input type="text" class="form-control" name="decryptionKey"{% if orginal_decryptionKey %} value="{{orginal_decryptionKey}}" {% endif %} id="decryptionKey" placeholder="Key">
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<textarea name="cipherText" class="form-control" id="cipherText" cols="30" rows="8" placeholder="Cipher Text">{% if orginal_cipherText %}{{orginal_cipherText}}{% endif %}</textarea>
+												</div>
+											</div>
+                      <div class="col-md-12">
+												<div class="form-group">
+													<textarea disabled name="decryptionResult" class="form-control" style="background-color: #424242;" id="decryptionResult" cols="30" rows="8" placeholder="Decryption Result">{% if plainText %}{{plainText}}{% endif %}</textarea>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<input type="submit" value="Decrypt" class="btn btn-primary">
+													<div class="submitting"></div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="{% static 'Crypto_AES/js/jquery.min.js' %}"></script>
+  <script src="{% static 'Crypto_AES/js/popper.js' %}"></script>
+  <script src="{% static 'Crypto_AES/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'Crypto_AES/js/jquery.validate.min.js' %}"></script>
+  <script src="{% static 'Crypto_AES/js/main.js' %}"></script>
+  {% if auto_scroll %}
+  <script>document.getElementById("{{auto_scroll}}").scrollIntoView(); </script> 
+  {% endif %}
+ 
+  <script>
+    // This script for counting the encryption and decryption keys
+  var encryptionKeyCounter = document.getElementById ('encryptionKeyCounter'),
+  encryptionKeyInput = document.getElementById ('encryptionKey');
+  encryptionKeyCounter.innerHTML = encryptionKeyInput.value.length;
+  encryptionKeyInput.addEventListener ('keyup', function (e) {
+    encryptionKeyCounter.innerHTML = encryptionKeyInput.value.length;
+  });
+
+  var decryptionKeyCounter = document.getElementById ('decryptionKeyCounter'),
+  decryptionKeyInput = document.getElementById ('decryptionKey');
+  decryptionKeyCounter.innerHTML = decryptionKeyInput.value.length;
+  decryptionKeyInput.addEventListener ('keyup', function (e) {
+    decryptionKeyCounter.innerHTML = decryptionKeyInput.value.length;
+  });
+  </script>
+	</body>
+</html>
+
