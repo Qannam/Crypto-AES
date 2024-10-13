@@ -10,29 +10,44 @@ from django.shortcuts import redirect
 class AESCipher(object):
 
     def __init__(self, key):
+    #   initialize objects of a class AESCipher
+    #   input: key. The key size should be 32 byte length 256 bit  
+
         if len(key) != 32:
             print()
             raise Exception("Sorry, you key length is " + str(len(key)) +" key size should be 32 byte length 256 bit") 
         self.bs = AES.block_size
         self.key = key.encode("utf8") # key size should be 32 byte length 256 bit
 
+    
     def encrypt(self, raw):
+    #   The encryption will done here with CBC as the mode of operation; the iv is randomly generated, and it will use the key in the initialization function
+    #   Input: plaintext
+    #   Output: iv + ciphertext as base64 encoded
+
         raw = self._pad(raw)
         iv = Random.new().read(AES.block_size)
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         return base64.b64encode(iv + cipher.encrypt(raw.encode())).decode('utf-8')
 
     def decrypt(self, enc):
+    #   The decryption will done here. It will use the key in the initialization function
+    #   Input: iv + ciphertext as base64 encoded
+    #   Output: plaintext 
+
         enc = base64.b64decode(enc)
         iv = enc[:AES.block_size]
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         return AESCipher._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
 
     def _pad(self, s):
+        #   This function will handle the padding if the block size is not complete
         return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
 
     @staticmethod
+
     def _unpad(s):
+        #   This function will handle the unpadding before the decryption
         return s[:-ord(s[len(s)-1:])]
 
 
