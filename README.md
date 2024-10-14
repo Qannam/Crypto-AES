@@ -14,7 +14,7 @@ Requirements:
 by using **docker-compose.yml** file.
 
     docker-compose up
-Access the app on **http:/127.0.0.1:8000**
+Access the app on **http://127.0.0.1:8000**
 ## Option 2: Django development server
 Requirements:
  - [python 3](https://www.python.org/downloads/)
@@ -24,7 +24,7 @@ Run the following commands
 
     pip install -r requirements.txt
     python .\app\manage.py runserver
-Access the app on **http:/127.0.0.1:8000**
+Access the app on **http://127.0.0.1:8000**
  
 
 
