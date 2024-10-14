@@ -4,4 +4,10 @@ __pycache__
 *.csr
 *.key
 *.crt
+*.sqlite*
+__pycache__
+.DS_Store
+*.csr
+*.key
+*.crt
 *.pyc
