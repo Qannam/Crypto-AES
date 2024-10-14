@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from django.template import loader
 import base64
 import hashlib
+from django.shortcuts import redirect
 from Crypto import Random
 from Crypto.Cipher import AES
-from django.shortcuts import redirect
 
 class AESCipher(object):
 
@@ -21,7 +21,8 @@ class AESCipher(object):
 
     
     def encrypt(self, raw):
-    #   The encryption will done here with CBC as the mode of operation; the iv is randomly generated, and it will use the key in the initialization function
+    #   The encryption will done here with CBC as the mode of operation; the iv is randomly generated, 
+    #   and it will use the key in the initialization function
     #   Input: plaintext
     #   Output: iv + ciphertext as base64 encoded
 
